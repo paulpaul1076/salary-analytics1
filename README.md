@@ -1,0 +1,2 @@
+Command to launch this application:
+MacBook-Air-Anastasia:bin pavel$ ./spark-submit --driver-class-path /Users/pavel/IdeaProjects/salary-analytics/target/scala-2.11/SalaryAnalytics.jar   --class com.company.Solution /Users/pavel/IdeaProjects/salary-analytics/target/scala-2.11/SalaryAnalytics.jar --p /Users/pavel/IdeaProjects/salary-analytics/src/test/resources/emp1/developers/111.json,/Users/pavel/IdeaProjects/salary-analytics/src/test/resources/emp1/hr/555.json  --csv /Users/pavel/Desktop/test2
