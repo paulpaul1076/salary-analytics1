@@ -15,5 +15,5 @@
 Командой "sbt assembly" (я собирал с версией sbt 0.13.8).
 
 **Пример команды для запуска:**
-./spark-submit --driver-class-path SalaryAnalytics.jar --class com.company.Solution SalaryAnalytics.jar --paths /emp1/developers/111.json,/emp1/hr/555.json --csv /path/to/csv
+./spark-submit --driver-class-path SalaryAnalytics.jar --master <ВАШ МАСТЕР УРЛ> --class com.company.Solution SalaryAnalytics.jar --paths /emp1/developers/111.json,/emp1/hr/555.json --csv /path/to/csv
 
