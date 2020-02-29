@@ -1,9 +1,9 @@
 package com.company
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.SparkSession
 import org.junit.Test
 import org.junit.Assert._
-
+import DataFrameExtensions._
 
 class SolutionTest {
 
@@ -11,28 +11,33 @@ class SolutionTest {
   import spark.implicits._
 
   @Test def runCalculations(): Unit = {
-  }
+    val basePath1 = "src/test/resources/emp1/"
+    val paths1 = Seq("developers/111.json","hr/555.json","managers/777.json")
 
-  @Test def extractDataFrameFromPath(): Unit = {
-    val actual = Solution.extractDataFrameFromPath(spark, "src/test/resources/emp1/developers/111.json")
-    val expected = List(("developers", "{  \"name\" : \"Van Basten\",  \"salary\": \"100\"}")).toDF("department", "employee info")
+    val basePath2 = "src/test/resources/emp2/"
+    val paths2 = Seq("developers/111.json","hr/555.json","managers/777.json", "i/do/not/exist")
 
-    assertTrue(areDataFramesEqual(expected, actual))
-  }
+    val paths = paths1.map(basePath1 + _).mkString(",") + "," + paths2.map(basePath2 + _).mkString(",")
 
-  private def areDataFramesEqual(df1: DataFrame, df2: DataFrame): Boolean = {
-    df1.except(df2).isEmpty && df2.except(df1).isEmpty
-  }
+    val answer = Solution.runCalculations(paths, spark)
 
-  @Test def readDataFromPath(): Unit = {
-    val departmentAndEmployee = Solution.readDataFromPath("src/test/resources/emp1/developers/111.json")
-    assertEquals(("developers", "{  \"name\" : \"Van Basten\",  \"salary\": \"100\"}"), departmentAndEmployee)
-  }
+    val expectedAllEmployees = Seq(
+      ("developers", "Van Basten", 100),
+      ("hr", "Diego Maradona", 800),
+      ("managers", "Rud Gulit", 150),
+      ("developers", "Van Basten2", 100),
+      ("hr", "Diego Maradona2", 900),
+      ("managers", "Rud Gulit2", 150)
+    ).toDF("department", "name", "salary")
 
-  @Test def extractDepartment(): Unit = {
-    val path = "/data/emp/developers/111.json"
-    val department = Solution.extractDepartment(path)
+    val expectedEmployeeWithTheHighestSalary = Seq(
+      ("hr", "Diego Maradona2", 900)
+    ).toDF("department", "name", "salary")
 
-    assertEquals("developers", department)
+    val expectedSumOfAllSalaries = Seq(2200).toDF("sum(salary)")
+
+    assertTrue(expectedAllEmployees.isEqualTo(answer.allEmployees))
+    assertTrue(expectedEmployeeWithTheHighestSalary.isEqualTo(answer.employeeWithTheHighestSalary))
+    assertTrue(expectedSumOfAllSalaries.isEqualTo(answer.sumOfAllSalaries))
   }
 }
