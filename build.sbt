@@ -8,8 +8,8 @@ mainClass in Compile := Some("com.company.Solution")
 assemblyJarName in assembly := "SalaryAnalytics.jar"
 
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % "2.4.3",
-  "org.apache.spark" %% "spark-sql" % "2.4.3",
+  "org.apache.spark" %% "spark-core" % "2.4.3" % "provided",
+  "org.apache.spark" %% "spark-sql" % "2.4.3" % "provided",
   "org.json4s" %% "json4s-jackson" % "3.6.7",
   "junit" % "junit" % "4.12" % Test,
   "commons-cli" % "commons-cli" % "1.4",
